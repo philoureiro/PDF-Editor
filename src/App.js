@@ -1,6 +1,6 @@
-import React from "react";
-import { render } from "react-dom";
-import { Stage, Layer, Rect, Transformer } from "react-konva";
+import React from 'react';
+import { render } from 'react-dom';
+import { Stage, Layer, Rect, Transformer } from 'react-konva';
 
 const Rectangle = ({ shapeProps, isSelected, onSelect, onChange }) => {
   const shapeRef = React.useRef();
@@ -14,6 +14,8 @@ const Rectangle = ({ shapeProps, isSelected, onSelect, onChange }) => {
     }
   }, [isSelected]);
 
+  // igor
+
   return (
     <React.Fragment>
       <Rect
@@ -22,14 +24,14 @@ const Rectangle = ({ shapeProps, isSelected, onSelect, onChange }) => {
         ref={shapeRef}
         {...shapeProps}
         draggable
-        onDragEnd={(e) => {
+        onDragEnd={e => {
           onChange({
             ...shapeProps,
             x: e.target.x(),
             y: e.target.y(),
           });
         }}
-        onTransformEnd={(e) => {
+        onTransformEnd={e => {
           // transformer is changing scale of the node
           // and NOT its width or height
           // but in the store we have only width and height
@@ -73,16 +75,16 @@ const initialRectangles = [
     y: 10,
     width: 100,
     height: 100,
-    fill: "red",
-    id: "rect1",
+    fill: 'red',
+    id: 'rect1',
   },
   {
     x: 150,
     y: 150,
     width: 100,
     height: 100,
-    fill: "green",
-    id: "rect2",
+    fill: 'green',
+    id: 'rect2',
   },
 ];
 
@@ -90,7 +92,7 @@ const App = () => {
   const [rectangles, setRectangles] = React.useState(initialRectangles);
   const [selectedId, selectShape] = React.useState(null);
 
-  const checkDeselect = (e) => {
+  const checkDeselect = e => {
     // deselect when clicked on empty area
     const clickedOnEmpty = e.target === e.target.getStage();
     if (clickedOnEmpty) {
@@ -115,7 +117,7 @@ const App = () => {
               onSelect={() => {
                 selectShape(rect.id);
               }}
-              onChange={(newAttrs) => {
+              onChange={newAttrs => {
                 const rects = rectangles.slice();
                 rects[i] = newAttrs;
                 setRectangles(rects);
