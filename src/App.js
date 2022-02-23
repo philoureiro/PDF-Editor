@@ -14,7 +14,7 @@ const Rectangle = ({ shapeProps, isSelected, onSelect, onChange }) => {
     }
   }, [isSelected]);
 
-  // igor
+  // igor santana
 
   return (
     <React.Fragment>
