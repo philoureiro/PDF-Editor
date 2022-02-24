@@ -81,9 +81,9 @@ export const getPDFBlob = async (urlFile) => {
   return pdfDoc.getPages();
 };
 
-export const Scalator = (scale, blob, page) => {
-  if (blob[page]) {
-    const { width, height } = blob[page].getSize();
+export const Scalator = (scale, blob) => {
+  if (blob[0]) {
+    const { width, height } = blob[0].getSize();
 
     return {
       defaultScale: {

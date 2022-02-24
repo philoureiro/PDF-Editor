@@ -113,9 +113,12 @@ const PDFEditor = ({ toDrawer, currentDimmensions }) => {
         onTouchStart={checkDeselect}
         style={{
           backgroundColor: "transparent",
-          position: "absolute",
-          border: "1px solid red",
+          border: "1px solid yellow",
           display: "flex",
+          zIndex: 0,
+          position: "absolute",
+          maxWidth: currentDimmensions?.width || 0,
+          maxHeight: currentDimmensions?.height || 0,
         }}
       >
         <Layer>

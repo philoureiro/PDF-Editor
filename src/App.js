@@ -23,7 +23,7 @@ const App = () => {
         const pdfBlob = blob;
 
         setFilePDF(pdfBlob);
-        const { defaultScale, currentScale } = Scalator(1, pdfBlob, page);
+        const { defaultScale, currentScale } = Scalator(1, pdfBlob);
         setDefaultDimmensions(defaultScale);
         setCurrentDefaultDimmensions(currentScale);
       });
@@ -36,8 +36,6 @@ const App = () => {
     const { currentScale } = Scalator(scale, filePDF, page);
     setCurrentDefaultDimmensions(currentScale);
   };
-  console.log("def => ", defaultDimmensions);
-  console.log("curr => ", currentDimmensions);
 
   return (
     <React.Fragment>
@@ -122,16 +120,33 @@ const App = () => {
             <ArrowRight style={{ marginLeft: "10px" }} />
           </button>
         </div>
+        <div
+          style={{
+            display: "flex",
+            width: "500px",
+            justifyContent: "space-between",
+            marginBottom: "20px",
+          }}
+        >
+          <p> {`scale: ${currentDimmensions?.scale}`}</p>
+
+          <p> {`page: ${page}`}</p>
+
+          <p> {`width: ${currentDimmensions?.width}`}</p>
+
+          <p> {`height: ${currentDimmensions?.height}`}</p>
+        </div>
 
         <div
           style={{
-            backgroundColor: "black",
+            backgroundColor: "gray",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            flexDirection: " column",
+            flexDirection: "column",
             borderRadius: "20px",
-            padding: currentDimmensions?.width ? "20px" : null,
+            padding: `${currentDimmensions?.width ? "25px" : 0}`,
+
             width: currentDimmensions?.width || 0,
             height: currentDimmensions?.height || 0,
           }}
