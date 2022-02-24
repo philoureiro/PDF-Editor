@@ -74,6 +74,7 @@ const initialRectangles = [
     width: 100,
     height: 100,
     fill: "red",
+    opacity: 0.2,
     id: "rect1",
   },
   {
@@ -82,14 +83,15 @@ const initialRectangles = [
     width: 100,
     height: 100,
     fill: "green",
+    opacity: 0.2,
     id: "rect2",
   },
 ];
 
-const PDFEditor = ({ toDrawer }) => {
+const PDFEditor = ({ toDrawer, currentDimmensions }) => {
   const [rectangles, setRectangles] = React.useState(initialRectangles);
   const [selectedId, selectShape] = React.useState(null);
-
+  let width, height;
   const checkDeselect = (e) => {
     // deselect when clicked on empty area
     const clickedOnEmpty = e.target === e.target.getStage();
@@ -98,13 +100,23 @@ const PDFEditor = ({ toDrawer }) => {
     }
   };
 
+  if (currentDimmensions) {
+    width = currentDimmensions?.width;
+    height = currentDimmensions?.height;
+  }
   return (
     toDrawer && (
       <Stage
-        width={window.innerWidth}
-        height={window.innerHeight}
+        width={width}
+        height={height}
         onMouseDown={checkDeselect}
         onTouchStart={checkDeselect}
+        style={{
+          backgroundColor: "transparent",
+          position: "absolute",
+          border: "1px solid red",
+          display: "flex",
+        }}
       >
         <Layer>
           {rectangles.map((rect, i) => {
