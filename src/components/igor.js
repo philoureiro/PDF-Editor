@@ -1,10 +1,11 @@
 import React from "react";
 import { Stage, Layer, Rect, Transformer } from "react-konva";
-
 import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
 
 // import('bulma/css/bulma.css');
 // import('material-design-icons/iconfont/material-icons.css');
+
+const PDF_HEIGHT = 1500;
 
 const Rectangle = ({ shapeProps, isSelected, onSelect, onChange }) => {
   const shapeRef = React.useRef();
@@ -75,11 +76,19 @@ const Rectangle = ({ shapeProps, isSelected, onSelect, onChange }) => {
 
 const initialRectangles = [
   {
+    x: 150,
+    y: 75,
+    width: 250,
+    height: 50,
+    fill: "green",
+    id: "rect1",
+  },
+  {
     x: 800,
     y: 400,
     width: 250,
     height: 50,
-    fill: "green",
+    fill: "gray",
     id: "rect2",
   },
 ];
@@ -89,8 +98,10 @@ const App = () => {
   const [selectedId, selectShape] = React.useState(null);
   const [filePdf, setFilePdf] = React.useState(null);
   const [showDrag, setShowDrag] = React.useState(false);
+  const [showPdf, setShowPdf] = React.useState(true);
   const [numPages, setNumPages] = React.useState(null);
   const [pageNumber, setPageNumber] = React.useState(1);
+  const [zoom, setZoom] = React.useState(1);
 
   const pdfInfoRef = React.useRef();
 
@@ -117,13 +128,32 @@ const App = () => {
   const onClickButton = () => {
     setShowDrag((prevState) => !prevState);
   };
-  // console.log(pdfInfoRef.current.offsetWidth);
-  // console.log(pdfInfoRef.current.offsetHeight);
+
+  const onClickButton2 = () => {
+    setShowPdf((prevState) => !prevState);
+  };
+
+  const zoomIn = () => {
+    if (zoom >= 3) return;
+    setZoom((prevState) => prevState + 0.2);
+  };
+
+  const zoomOut = () => {
+    if (zoom <= 0.2) return;
+    setZoom((prevState) => prevState - 0.2);
+  };
+
+  React.useEffect(() => {
+    console.log("width: ", pdfInfoRef.current?.offsetWidth);
+    console.log("height: ", pdfInfoRef.current?.offsetHeight);
+    console.log("scale: ", zoom);
+  }, [zoom]);
+
+  const zoomStyle = { padding: 20, margin: 10 };
 
   return (
     <div
       style={{
-        overflowX: "hidden",
         width: "100%",
         display: "flex",
         flexDirection: "column",
@@ -132,14 +162,38 @@ const App = () => {
     >
       <input
         type="file"
-        style={{ margin: "0.5rem auto", padding: "1rem 5rem" }}
+        style={{
+          margin: "0.5rem auto",
+          padding: "1rem 5rem",
+          position: "absolute",
+          left: 0,
+        }}
         onChange={onChangeInput}
       />
 
-      {!!filePdf ? (
+      <div style={{ position: "absolute", right: 0 }}>
+        <button
+          type="button"
+          onClick={zoomIn}
+          style={zoomStyle}
+          disabled={zoom >= 3}
+        >
+          +
+        </button>
+        <button
+          type="button"
+          onClick={zoomOut}
+          style={zoomStyle}
+          disabled={zoom <= 0.2}
+        >
+          -
+        </button>
+      </div>
+
+      {!!filePdf && showPdf ? (
         <div>
           <Document file={filePdf} onLoadSuccess={onDocumentLoadSuccess}>
-            <Page pageNumber={pageNumber} height={1000} inputRef={pdfInfoRef} />
+            <Page pageNumber={pageNumber} inputRef={pdfInfoRef} scale={zoom} />
           </Document>
           <p>
             Page {pageNumber} of {numPages}
@@ -149,8 +203,8 @@ const App = () => {
 
       {showDrag ? (
         <Stage
-          width={window.innerWidth}
-          height={window.innerHeight - 200}
+          width={pdfInfoRef.current?.offsetWidth || 10}
+          height={pdfInfoRef.current?.offsetHeight || 10}
           onMouseDown={checkDeselect}
           onTouchStart={checkDeselect}
           style={{ position: "absolute", top: 0, border: "1px solid red" }}
@@ -181,6 +235,7 @@ const App = () => {
         <div>
           <button
             style={{ margin: "10px" }}
+            disabled={pageNumber === 1}
             onClick={() =>
               setPageNumber((prevPage) => {
                 if (prevPage === 1) return prevPage;
@@ -193,8 +248,12 @@ const App = () => {
           <button style={{ margin: "10px" }} onClick={onClickButton}>
             {showDrag ? "Fechar" : "Mapear"}
           </button>
+          <button style={{ margin: "10px" }} onClick={onClickButton2}>
+            {showPdf ? "Esconder" : "Mostrar"}
+          </button>
           <button
             style={{ margin: "10px" }}
+            disabled={pageNumber === numPages}
             onClick={() =>
               setPageNumber((prevPage) => {
                 if (prevPage === numPages) return prevPage;
@@ -206,6 +265,16 @@ const App = () => {
           </button>
         </div>
       ) : null}
+
+      <div
+        style={{
+          backgroundColor: "red",
+          width: pdfInfoRef.current?.offsetWidth || 10,
+          height: PDF_HEIGHT,
+        }}
+      >
+        <h1>DIV MESMO TAMANHO DO PDF</h1>
+      </div>
     </div>
   );
 };

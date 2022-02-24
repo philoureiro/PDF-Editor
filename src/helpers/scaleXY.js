@@ -1,3 +1,5 @@
+import { degrees, PDFDocument, rgb, StandardFonts } from "pdf-lib";
+
 export const scaleXY = (number, browserName) => {
   const chrome = {
     1: {
@@ -68,4 +70,25 @@ export const scaleXY = (number, browserName) => {
     },
   };
   return browserName === "chrome" ? chrome[number] : firefox[number];
+};
+
+export const Scalator = async (scale, urlFile) => {
+  console.log("entrou");
+  const existingPdfBytes = await fetch(urlFile).then((res) =>
+    res.arrayBuffer()
+  );
+  const pdfDoc = await PDFDocument.load(existingPdfBytes);
+  console.log("teste", pdfDoc);
+  const pages = pdfDoc.getPages();
+  console.log("tam", pages.lenght);
+  console.log(pages[0].getSize());
+  const { width, height } = pdfDoc[0].getSize();
+
+  console.log(pdfDoc[0]);
+  return {
+    currentWidth: width * scale,
+    currentHeight: height * scale,
+    initialWidth: width,
+    initialHeight: height,
+  };
 };

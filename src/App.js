@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import PDFEditor from "./components/EditorPDF";
 import PDFViewer from "./components/PDFViewer";
-import { Plus, Minus } from "react-feather";
-
+import { Plus, Minus, CheckSquare } from "react-feather";
+import { Scalator } from "./helpers/scaleXY";
 const App = () => {
   const [scale, setScale] = useState(1);
   const [filePDF, setFilePDF] = useState(null);
+  const [toDrawer, setToDrawer] = useState(false);
+
   const onChangeInput = (e) => {
     if (e.currentTarget?.files?.length) {
       const [pdf] = e.currentTarget.files;
 
       const pdfBlob = URL.createObjectURL(pdf);
 
+      const pdfSize = Scalator(1, pdfBlob);
+      console.log(pdfSize);
       setFilePDF(pdfBlob);
       return;
     }
@@ -40,9 +44,15 @@ const App = () => {
           style={{ margin: "0.5rem auto", padding: "1rem 5rem" }}
           onChange={onChangeInput}
         />
+        <button onClick={() => setToDrawer(!toDrawer)}>
+          {" "}
+          MARCAR
+          <CheckSquare />
+        </button>
       </div>
 
-      <PDFViewer scale={scale} filePDF={filePDF} />
+      <PDFViewer scale={scale} filePDF={filePDF} toDrawer={toDrawer} />
+      <PDFEditor scale={scale} toDrawer={toDrawer} />
     </React.Fragment>
   );
 };
