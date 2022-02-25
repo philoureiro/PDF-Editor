@@ -60,7 +60,7 @@ const App = () => {
             onClick={() =>
               changeScale(
                 currentDimmensions.scale < 10
-                  ? currentDimmensions.scale + 0.2
+                  ? currentDimmensions.scale + 0.5
                   : currentDimmensions.scale
               )
             }
@@ -71,7 +71,7 @@ const App = () => {
             onClick={() =>
               changeScale(
                 currentDimmensions.scale > 1
-                  ? currentDimmensions.scale - 0.2
+                  ? currentDimmensions.scale - 0.5
                   : currentDimmensions.scale
               )
             }
