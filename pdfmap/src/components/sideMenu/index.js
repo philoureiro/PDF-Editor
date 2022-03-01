@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Menu, Button, Modal } from 'antd';
 import {
   MenuUnfoldOutlined,
@@ -12,6 +12,7 @@ import {
   LeftOutlined,
   RightOutlined,
   CheckOutlined,
+  ReloadOutlined,
 } from '@ant-design/icons';
 
 import CreateModal from '../createModal';
@@ -30,11 +31,13 @@ export default function SideMenu({
   pagesHandler,
   setPagesHandler,
   items,
+  setItems,
 }) {
   const { currentPage, totalPages } = pagesHandler;
 
   const [collapsed, setCollapsed] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [loadChanges, setLoadChanges] = useState([]);
 
   const inputDocumentRef = useRef(null);
 
@@ -90,6 +93,20 @@ export default function SideMenu({
       content: `Your changes have been saved: \n${changes}`,
     });
   };
+
+  const loadStoragedChanges = () => {
+    setItems(loadChanges);
+    success({
+      title: 'Loaded',
+      content: 'Your changes have been loaded!',
+    });
+  };
+
+  useEffect(() => {
+    const changes = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (changes) setLoadChanges(JSON.parse(changes));
+    else if (changes === null) setLoadChanges([]);
+  }, [items]);
 
   return (
     <>
@@ -186,6 +203,14 @@ export default function SideMenu({
               disabled={items.length === 0}
             >
               Save changes
+            </Menu.Item>
+            <Menu.Item
+              key='6'
+              icon={<ReloadOutlined />}
+              onClick={loadStoragedChanges}
+              disabled={loadChanges.length === 0}
+            >
+              Load changes
             </Menu.Item>
           </SubMenu>
         </Menu>

@@ -50,6 +50,7 @@ export default function Home() {
         pagesHandler={pagesHandler}
         setPagesHandler={setPagesHandler}
         items={elements}
+        setItems={setElements}
       />
       <DocumentContainer
         document={urlPdf}
