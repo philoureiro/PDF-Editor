@@ -1,27 +1,28 @@
-import { useState } from 'react';
-import { Stage, Layer } from 'react-konva';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
+import { Stage, Layer } from 'react-konva'
 
-import Element from '../element';
+import Element from '../element'
 
 const CONTAINER_STYLE = {
   position: 'absolute',
   top: 0,
-  border: '1px solid #f00',
-};
+  border: '1px solid #f00'
+}
 
-export default function MapContainer({ config, items, setItems }) {
-  const [selectedItem, setSelectedItem] = useState(null);
+function MapContainer ({ config, items, setItems }) {
+  const [selectedItem, setSelectedItem] = useState(null)
 
   const checkDeselect = event => {
-    const clickedOnEmpty = event.target === event.target.getStage();
-    if (clickedOnEmpty) setSelectedItem(null);
-  };
+    const clickedOnEmpty = event.target === event.target.getStage()
+    if (clickedOnEmpty) setSelectedItem(null)
+  }
 
   const handleChangeElement = ({ changes, index }) => {
-    const elements = items.slice();
-    elements[index] = changes;
-    setItems(elements);
-  };
+    const elements = items.slice()
+    elements[index] = changes
+    setItems(elements)
+  }
 
   return (
     <Stage
@@ -42,5 +43,24 @@ export default function MapContainer({ config, items, setItems }) {
         ))}
       </Layer>
     </Stage>
-  );
+  )
 }
+
+MapContainer.propTypes = {
+  config: PropTypes.shape({
+    width: PropTypes.number,
+    height: PropTypes.number
+  }).isRequired,
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      x: PropTypes.number,
+      y: PropTypes.number,
+      width: PropTypes.number,
+      height: PropTypes.number
+    })
+  ).isRequired,
+  setItems: PropTypes.func.isRequired
+}
+
+export default MapContainer

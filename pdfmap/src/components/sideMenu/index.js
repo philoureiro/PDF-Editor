@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Menu, Button, Modal } from 'antd';
+import React, { useState, useRef, useEffect } from 'react'
+import PropTypes from 'prop-types'
+import { Menu, Button, message } from 'antd'
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -12,101 +13,104 @@ import {
   LeftOutlined,
   RightOutlined,
   CheckOutlined,
-  ReloadOutlined,
-} from '@ant-design/icons';
+  ReloadOutlined
+} from '@ant-design/icons'
 
-import CreateModal from '../createModal';
+import CreateModal from '../createModal'
+import { useDocument } from '../../contexts/document'
 
-const { SubMenu } = Menu;
-const { success } = Modal;
+const { SubMenu } = Menu
 
-const LOCAL_STORAGE_KEY = '@pdfmap';
+const LOCAL_STORAGE_KEY = '@pdfmap'
 
-export default function SideMenu({
+function SideMenu ({
   onAddElement,
-  document,
-  setDocument,
-  scale,
-  setScale,
-  pagesHandler,
-  setPagesHandler,
   items,
-  setItems,
+  setItems
 }) {
-  const { currentPage, totalPages } = pagesHandler;
+  const { pagesHandler, setPagesHandler, setUrl, scale, setScale, url } = useDocument()
 
-  const [collapsed, setCollapsed] = useState(false);
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [loadChanges, setLoadChanges] = useState([]);
+  const { currentPage, totalPages } = pagesHandler
 
-  const inputDocumentRef = useRef(null);
+  const [collapsed, setCollapsed] = useState(false)
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [loadChanges, setLoadChanges] = useState([])
 
-  const toggleCollapsed = () => setCollapsed(prevState => !prevState);
+  const inputDocumentRef = useRef(null)
+
+  const toggleCollapsed = () => setCollapsed(prevState => !prevState)
 
   const toggleShowCreateModal = () =>
-    setShowCreateModal(prevState => !prevState);
+    setShowCreateModal(prevState => !prevState)
 
   const handleSetUrlFromFile = event => {
     if (event.currentTarget?.files?.length) {
-      const [pdf] = event.currentTarget.files;
-      setDocument(URL.createObjectURL(pdf));
-      return;
+      const [pdf] = event.currentTarget.files
+      setUrl(URL.createObjectURL(pdf))
+      return
     }
-    setDocument(null);
-  };
+    setUrl(null)
+  }
 
-  const onClickInputDocument = () => inputDocumentRef.current?.click();
+  const onClickInputDocument = () => inputDocumentRef.current?.click()
 
   const incrimentScale = () => {
     setScale(prevState => {
-      if (prevState >= 2.5) return prevState;
-      return Number((prevState + 0.3).toFixed(1));
-    });
-  };
+      if (prevState >= 2.5) return prevState
+      return Number((prevState + 0.3).toFixed(1))
+    })
+  }
 
   const decrementScale = () => {
     setScale(prevState => {
-      if (prevState <= 0.6) return prevState;
-      return Number((prevState - 0.3).toFixed(1));
-    });
-  };
+      if (prevState <= 0.6) return prevState
+      return Number((prevState - 0.3).toFixed(1))
+    })
+  }
 
   const nextPage = () => {
     setPagesHandler(prevState => {
-      if (prevState.currentPage >= prevState.totalPages) return prevState;
-      return { ...prevState, currentPage: prevState.currentPage + 1 };
-    });
-  };
+      if (prevState.currentPage >= prevState.totalPages) return prevState
+      return { ...prevState, currentPage: prevState.currentPage + 1 }
+    })
+  }
 
   const previousPage = () => {
     setPagesHandler(prevState => {
-      if (prevState.currentPage <= 1) return prevState;
-      return { ...prevState, currentPage: prevState.currentPage - 1 };
-    });
-  };
+      if (prevState.currentPage <= 1) return prevState
+      return { ...prevState, currentPage: prevState.currentPage - 1 }
+    })
+  }
 
   const saveChanges = () => {
-    const changes = JSON.stringify(items);
-    localStorage.setItem(LOCAL_STORAGE_KEY, changes);
-    success({
-      title: 'Saved',
-      content: `Your changes have been saved: \n${changes}`,
-    });
-  };
+    const changes = JSON.stringify(removeScale(items))
+    localStorage.setItem(LOCAL_STORAGE_KEY, changes)
+    message.success('Your changes have been saved!')
+  }
+
+  const removeScale = () => {
+    return items.map(item => {
+      const { x, y, width, height } = item
+      return {
+        ...item,
+        x: x / scale,
+        y: y / scale,
+        width: width / scale,
+        height: height / scale
+      }
+    })
+  }
 
   const loadStoragedChanges = () => {
-    setItems(loadChanges);
-    success({
-      title: 'Loaded',
-      content: 'Your changes have been loaded!',
-    });
-  };
+    setItems(loadChanges)
+    message.success('Your changes have been loaded!')
+  }
 
   useEffect(() => {
-    const changes = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (changes) setLoadChanges(JSON.parse(changes));
-    else if (changes === null) setLoadChanges([]);
-  }, [items]);
+    const changes = localStorage.getItem(LOCAL_STORAGE_KEY)
+    if (changes) setLoadChanges(JSON.parse(changes))
+    else if (changes === null) setLoadChanges([])
+  }, [items])
 
   return (
     <>
@@ -121,7 +125,7 @@ export default function SideMenu({
           position: 'fixed',
           left: 10,
           top: 10,
-          zIndex: 100,
+          zIndex: 100
         }}
       >
         <Button
@@ -156,7 +160,7 @@ export default function SideMenu({
             key='sub1'
             icon={<SettingOutlined />}
             title='Document Settings'
-            disabled={!document}
+            disabled={!url}
           >
             <Menu.Item key='2'>
               <div style={{ display: 'flex' }}>
@@ -187,7 +191,7 @@ export default function SideMenu({
             key='sub2'
             icon={<ToolOutlined />}
             title='Map Tools'
-            disabled={!document}
+            disabled={!url}
           >
             <Menu.Item
               key='4'
@@ -216,5 +220,13 @@ export default function SideMenu({
         </Menu>
       </div>
     </>
-  );
+  )
 }
+
+SideMenu.propTypes = {
+  onAddElement: PropTypes.func.isRequired,
+  items: PropTypes.array.isRequired,
+  setItems: PropTypes.func.isRequired
+}
+
+export default SideMenu

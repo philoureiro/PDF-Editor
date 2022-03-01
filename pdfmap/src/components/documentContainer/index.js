@@ -1,29 +1,26 @@
-import { useState, useRef } from 'react';
-import { pdfjs, Document, Page } from 'react-pdf';
+import React, { useRef } from 'react'
+import { pdfjs, Document, Page } from 'react-pdf'
+import PropTypes from 'prop-types'
+import { useDocument } from '../../contexts/document'
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`
+function DocumentContainer ({ setDocumentSize }) {
+  const { pagesHandler, setPagesHandler, scale, url } = useDocument()
 
-export default function DocumentContainer({
-  document,
-  scale,
-  setDocumentSize,
-  pagesHandler,
-  setPagesHandler,
-}) {
-  const documentRef = useRef(null);
+  const documentRef = useRef(null)
 
   const setTotalPages = ({ numPages }) =>
-    setPagesHandler(prevState => ({ ...prevState, totalPages: numPages }));
+    setPagesHandler(prevState => ({ ...prevState, totalPages: numPages }))
 
   const getDocumentPageSize = () => {
-    const { width, height } = documentRef.current.getBoundingClientRect();
-    setDocumentSize({ width, height });
-  };
+    const { width, height } = documentRef.current.getBoundingClientRect()
+    setDocumentSize({ width, height })
+  }
 
   return (
     <>
       <Document
-        file={document}
+        file={url}
         onLoadSuccess={setTotalPages}
         onLoadError={console.error}
         inputRef={documentRef}
@@ -39,5 +36,11 @@ export default function DocumentContainer({
         <span>Total: {pagesHandler.totalPages}</span>
       </div>
     </>
-  );
+  )
 }
+
+DocumentContainer.propTypes = {
+  setDocumentSize: PropTypes.func.isRequired
+}
+
+export default DocumentContainer
