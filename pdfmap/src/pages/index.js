@@ -57,7 +57,11 @@ export default function Home() {
         pagesHandler={pagesHandler}
         setPagesHandler={setPagesHandler}
       />
-      <MapContainer config={mapContainerConfig} items={elements} />
+      <MapContainer
+        config={mapContainerConfig}
+        items={elements}
+        setItems={setElements}
+      />
     </main>
   );
 }
