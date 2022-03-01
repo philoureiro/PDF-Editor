@@ -40,7 +40,7 @@ export default function SideMenu({ onAddElement, setDocument }) {
         toggleVisible={toggleShowCreateModal}
         addElement={onAddElement}
       />
-      <div style={{ width: 256, position: 'absolute', left: 10, top: 10 }}>
+      <div style={{ width: 256, position: 'absolute', right: 10, top: 10 }}>
         <Button
           type='primary'
           onClick={toggleCollapsed}

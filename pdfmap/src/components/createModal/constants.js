@@ -7,19 +7,19 @@ export function generateRandomColor() {
   return `#${randColor.toUpperCase()}`;
 }
 
-const SIZES = {
+const SIZE = {
   default: { width: 200, height: 40 },
   large: { width: 350, height: 75 },
   rect: { width: 75, height: 75 },
 };
 
 const TYPE_OPTIONS = {
-  text: { size: SIZES.default, color: '#2146FF' },
-  number: { size: SIZES.default, color: '#400CA5' },
-  date: { size: SIZES.default, color: '#A8194B' },
-  checkbox: { size: SIZES.rect, color: '#F7540A' },
-  dropdown: { size: SIZES.default, color: '#FEFE35' },
-  textarea: { size: SIZES.large, color: '#68B42F' },
+  text: { ...SIZE.default, fill: '#2146FF' },
+  number: { ...SIZE.default, fill: '#400CA5' },
+  date: { ...SIZE.default, fill: '#A8194B' },
+  checkbox: { ...SIZE.rect, fill: '#F7540A' },
+  dropdown: { ...SIZE.default, fill: '#FEFE35' },
+  textarea: { ...SIZE.large, fill: '#68B42F' },
 };
 
 export const SELECT_TYPE_OPTIONS = [

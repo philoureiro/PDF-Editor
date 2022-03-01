@@ -13,30 +13,29 @@ const MapContainer = dynamic(() => import('../components/mapContainer'), {
   ssr: false,
 });
 
-const ForwardRefDocumentContainer = forwardRef((props, ref) => (
-  <DocumentContainer {...props} documentRef={ref} />
-));
-
 const STYLE_MAIN = {
-  position: 'relative',
+  width: '100%',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  width: '100%',
-  minHeight: '100vh',
-  margin: '1rem 0',
+  position: 'relative',
 };
 
 const INITAL_STATE_ELEMENT = {
-  x: 0,
-  y: 0,
-  id: uuidv4(),
+  x: 100,
+  y: 100,
 };
 
 export default function Home() {
-  const documentRef = useRef(null);
-
-  const [elements, setElements] = useState([]);
+  const [elements, setElements] = useState([
+    {
+      ...INITAL_STATE_ELEMENT,
+      id: uuidv4(),
+      width: 100,
+      height: 100,
+      fill: '#000',
+    },
+  ]);
   const [urlPdf, setUrlPdf] = useState('');
   const [scale, setScale] = useState(1);
   const [mapContainerConfig, setMapContainerConfig] = useState({
@@ -45,20 +44,21 @@ export default function Home() {
   });
 
   const handleAddElement = element => {
-    const newElement = { ...element, ...INITAL_STATE_ELEMENT };
+    const newElement = { ...element, ...INITAL_STATE_ELEMENT, id: uuidv4() };
     setElements(prevElements => [...prevElements, newElement]);
   };
+
+  console.log('elements = ', elements);
 
   return (
     <main style={STYLE_MAIN}>
       <SideMenu onAddElement={handleAddElement} setDocument={setUrlPdf} />
-      <MapContainer config={mapContainerConfig} items={elements} />
-      <ForwardRefDocumentContainer
+      <DocumentContainer
         document={urlPdf}
         scale={scale}
         setDocumentSize={setMapContainerConfig}
-        ref={documentRef}
       />
+      <MapContainer config={mapContainerConfig} items={elements} />
     </main>
   );
 }

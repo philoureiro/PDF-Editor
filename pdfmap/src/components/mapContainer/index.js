@@ -4,8 +4,6 @@ const CONTAINER_STYLE = {
   position: 'absolute',
   top: 0,
   border: '1px solid #f00',
-  width: '50vw',
-  minWidth: '595px',
 };
 
 export default function MapContainer({ config, items }) {
