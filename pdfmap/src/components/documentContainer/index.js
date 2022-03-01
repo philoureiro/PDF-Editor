@@ -7,23 +7,15 @@ export default function DocumentContainer({
   document,
   scale,
   setDocumentSize,
+  pagesHandler,
+  setPagesHandler,
 }) {
-  const [pagesHandler, setPagesHandler] = useState({
-    currentPage: 1,
-    totalPages: 1,
-  });
-
   const documentRef = useRef(null);
 
   const setTotalPages = ({ numPages }) =>
     setPagesHandler(prevState => ({ ...prevState, totalPages: numPages }));
 
   const getDocumentPageSize = () => {
-    console.log(
-      'getDocumentPageSize = ',
-      documentRef.current.getBoundingClientRect()
-    );
-    console.log('current = ', documentRef.current);
     const { width, height } = documentRef.current.getBoundingClientRect();
     setDocumentSize({ width, height });
   };

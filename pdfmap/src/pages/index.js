@@ -21,42 +21,41 @@ const STYLE_MAIN = {
   position: 'relative',
 };
 
-const INITAL_STATE_ELEMENT = {
-  x: 100,
-  y: 100,
-};
-
 export default function Home() {
-  const [elements, setElements] = useState([
-    {
-      ...INITAL_STATE_ELEMENT,
-      id: uuidv4(),
-      width: 100,
-      height: 100,
-      fill: '#000',
-    },
-  ]);
+  const [elements, setElements] = useState([]);
   const [urlPdf, setUrlPdf] = useState('');
   const [scale, setScale] = useState(1);
   const [mapContainerConfig, setMapContainerConfig] = useState({
     width: 0,
     height: 550,
   });
+  const [pagesHandler, setPagesHandler] = useState({
+    currentPage: 1,
+    totalPages: 1,
+  });
 
   const handleAddElement = element => {
-    const newElement = { ...element, ...INITAL_STATE_ELEMENT, id: uuidv4() };
+    const newElement = { ...element, x: 0, y: 0, id: uuidv4() };
     setElements(prevElements => [...prevElements, newElement]);
   };
 
-  console.log('elements = ', elements);
-
   return (
     <main style={STYLE_MAIN}>
-      <SideMenu onAddElement={handleAddElement} setDocument={setUrlPdf} />
+      <SideMenu
+        onAddElement={handleAddElement}
+        document={urlPdf}
+        setDocument={setUrlPdf}
+        scale={scale}
+        setScale={setScale}
+        pagesHandler={pagesHandler}
+        setPagesHandler={setPagesHandler}
+      />
       <DocumentContainer
         document={urlPdf}
         scale={scale}
         setDocumentSize={setMapContainerConfig}
+        pagesHandler={pagesHandler}
+        setPagesHandler={setPagesHandler}
       />
       <MapContainer config={mapContainerConfig} items={elements} />
     </main>

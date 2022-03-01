@@ -5,13 +5,29 @@ import {
   MenuFoldOutlined,
   UploadOutlined,
   PlusOutlined,
+  ToolOutlined,
+  SettingOutlined,
+  ZoomInOutlined,
+  ZoomOutOutlined,
+  LeftOutlined,
+  RightOutlined,
 } from '@ant-design/icons';
 
 import CreateModal from '../createModal';
 
 const { SubMenu } = Menu;
 
-export default function SideMenu({ onAddElement, setDocument }) {
+export default function SideMenu({
+  onAddElement,
+  document,
+  setDocument,
+  scale,
+  setScale,
+  pagesHandler,
+  setPagesHandler,
+}) {
+  const { currentPage, totalPages } = pagesHandler;
+
   const [collapsed, setCollapsed] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
@@ -33,6 +49,34 @@ export default function SideMenu({ onAddElement, setDocument }) {
 
   const onClickInputDocument = () => inputDocumentRef.current?.click();
 
+  const incrimentScale = () => {
+    setScale(prevState => {
+      if (prevState >= 2.5) return prevState;
+      return Number((prevState + 0.3).toFixed(1));
+    });
+  };
+
+  const decrementScale = () => {
+    setScale(prevState => {
+      if (prevState <= 0.6) return prevState;
+      return Number((prevState - 0.3).toFixed(1));
+    });
+  };
+
+  const nextPage = () => {
+    setPagesHandler(prevState => {
+      if (prevState.currentPage >= prevState.totalPages) return prevState;
+      return { ...prevState, currentPage: prevState.currentPage + 1 };
+    });
+  };
+
+  const previousPage = () => {
+    setPagesHandler(prevState => {
+      if (prevState.currentPage <= 1) return prevState;
+      return { ...prevState, currentPage: prevState.currentPage - 1 };
+    });
+  };
+
   return (
     <>
       <CreateModal
@@ -40,7 +84,15 @@ export default function SideMenu({ onAddElement, setDocument }) {
         toggleVisible={toggleShowCreateModal}
         addElement={onAddElement}
       />
-      <div style={{ width: 256, position: 'absolute', right: 10, top: 10 }}>
+      <div
+        style={{
+          width: 256,
+          position: 'fixed',
+          left: 10,
+          top: 10,
+          zIndex: 100,
+        }}
+      >
         <Button
           type='primary'
           onClick={toggleCollapsed}
@@ -52,7 +104,6 @@ export default function SideMenu({ onAddElement, setDocument }) {
         </Button>
         <Menu
           defaultSelectedKeys={['1']}
-          defaultOpenKeys={['sub1']}
           mode='inline'
           theme='light'
           inlineCollapsed={collapsed}
@@ -70,13 +121,52 @@ export default function SideMenu({ onAddElement, setDocument }) {
               hidden
             />
           </Menu.Item>
-          <Menu.Item
-            key='2'
-            icon={<PlusOutlined />}
-            onClick={toggleShowCreateModal}
+          <SubMenu
+            key='sub1'
+            icon={<SettingOutlined />}
+            title='Document Settings'
+            disabled={!document}
           >
-            Create Element
-          </Menu.Item>
+            <Menu.Item key='2'>
+              <div style={{ display: 'flex' }}>
+                <div onClick={decrementScale} style={{ flex: 1 }}>
+                  <ZoomOutOutlined />
+                </div>
+                <div style={{ flex: 1 }}>{scale}x</div>
+                <div onClick={incrimentScale}>
+                  <ZoomInOutlined />
+                </div>
+              </div>
+            </Menu.Item>
+            <Menu.Item key='3'>
+              <div style={{ display: 'flex' }}>
+                <div onClick={previousPage} style={{ flex: 1 }}>
+                  <LeftOutlined />
+                </div>
+                <div style={{ flex: 1 }}>
+                  {currentPage}/{totalPages}
+                </div>
+                <div onClick={nextPage}>
+                  <RightOutlined />
+                </div>
+              </div>
+            </Menu.Item>
+          </SubMenu>
+          <SubMenu
+            key='sub2'
+            icon={<ToolOutlined />}
+            title='Map Tools'
+            disabled={!document}
+          >
+            <Menu.Item
+              key='4'
+              icon={<PlusOutlined />}
+              onClick={toggleShowCreateModal}
+              disabled={!document}
+            >
+              Create Element
+            </Menu.Item>
+          </SubMenu>
         </Menu>
       </div>
     </>
