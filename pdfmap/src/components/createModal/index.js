@@ -15,6 +15,7 @@ export default function CreateModal({ visible, toggleVisible, addElement }) {
     if (!elementOptions) message.error(`Invalid type: ${type}`);
 
     addElement(elementOptions);
+    toggleVisible();
   };
 
   return (
