@@ -49,6 +49,7 @@ export default function Home() {
         setScale={setScale}
         pagesHandler={pagesHandler}
         setPagesHandler={setPagesHandler}
+        items={elements}
       />
       <DocumentContainer
         document={urlPdf}

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Menu, Button } from 'antd';
+import { Menu, Button, Modal } from 'antd';
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -11,11 +11,15 @@ import {
   ZoomOutOutlined,
   LeftOutlined,
   RightOutlined,
+  CheckOutlined,
 } from '@ant-design/icons';
 
 import CreateModal from '../createModal';
 
 const { SubMenu } = Menu;
+const { success } = Modal;
+
+const LOCAL_STORAGE_KEY = '@pdfmap';
 
 export default function SideMenu({
   onAddElement,
@@ -25,6 +29,7 @@ export default function SideMenu({
   setScale,
   pagesHandler,
   setPagesHandler,
+  items,
 }) {
   const { currentPage, totalPages } = pagesHandler;
 
@@ -74,6 +79,15 @@ export default function SideMenu({
     setPagesHandler(prevState => {
       if (prevState.currentPage <= 1) return prevState;
       return { ...prevState, currentPage: prevState.currentPage - 1 };
+    });
+  };
+
+  const saveChanges = () => {
+    const changes = JSON.stringify(items);
+    localStorage.setItem(LOCAL_STORAGE_KEY, changes);
+    success({
+      title: 'Saved',
+      content: `Your changes have been saved: \n${changes}`,
     });
   };
 
@@ -162,9 +176,16 @@ export default function SideMenu({
               key='4'
               icon={<PlusOutlined />}
               onClick={toggleShowCreateModal}
-              disabled={!document}
             >
               Create Element
+            </Menu.Item>
+            <Menu.Item
+              key='5'
+              icon={<CheckOutlined />}
+              onClick={saveChanges}
+              disabled={items.length === 0}
+            >
+              Save changes
             </Menu.Item>
           </SubMenu>
         </Menu>
