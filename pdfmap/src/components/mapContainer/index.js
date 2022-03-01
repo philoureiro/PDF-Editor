@@ -10,7 +10,7 @@ const CONTAINER_STYLE = {
   border: '1px solid #f00'
 }
 
-function MapContainer ({ config, items, setItems }) {
+function MapContainer ({ config, mutableElements, setMutableElements }) {
   const [selectedItem, setSelectedItem] = useState(null)
 
   const checkDeselect = event => {
@@ -19,9 +19,9 @@ function MapContainer ({ config, items, setItems }) {
   }
 
   const handleChangeElement = ({ changes, index }) => {
-    const elements = items.slice()
+    const elements = mutableElements.slice()
     elements[index] = changes
-    setItems(elements)
+    setMutableElements(elements)
   }
 
   return (
@@ -32,7 +32,7 @@ function MapContainer ({ config, items, setItems }) {
       style={CONTAINER_STYLE}
     >
       <Layer>
-        {items.map(({ id, ...elementProps }, index) => (
+        {mutableElements.map(({ id, ...elementProps }, index) => (
           <Element
             key={id}
             elementProps={{ ...elementProps, id }}
@@ -51,7 +51,7 @@ MapContainer.propTypes = {
     width: PropTypes.number,
     height: PropTypes.number
   }).isRequired,
-  items: PropTypes.arrayOf(
+  mutableElements: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
       x: PropTypes.number,
@@ -60,7 +60,7 @@ MapContainer.propTypes = {
       height: PropTypes.number
     })
   ).isRequired,
-  setItems: PropTypes.func.isRequired
+  setMutableElements: PropTypes.func.isRequired
 }
 
 export default MapContainer

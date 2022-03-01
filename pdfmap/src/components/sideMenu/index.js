@@ -25,8 +25,9 @@ const LOCAL_STORAGE_KEY = '@pdfmap'
 
 function SideMenu ({
   onAddElement,
-  items,
-  setItems
+  mutableElements,
+  setMutableElements,
+  setImmutableElements
 }) {
   const { pagesHandler, setPagesHandler, setUrl, scale, setScale, url } = useDocument()
 
@@ -83,13 +84,13 @@ function SideMenu ({
   }
 
   const saveChanges = () => {
-    const changes = JSON.stringify(removeScale(items))
+    const changes = JSON.stringify(removeScale(mutableElements))
     localStorage.setItem(LOCAL_STORAGE_KEY, changes)
     message.success('Your changes have been saved!')
   }
 
-  const removeScale = () => {
-    return items.map(item => {
+  const removeScale = (array) => {
+    return array.map(item => {
       const { x, y, width, height } = item
       return {
         ...item,
@@ -102,7 +103,8 @@ function SideMenu ({
   }
 
   const loadStoragedChanges = () => {
-    setItems(loadChanges)
+    setImmutableElements(loadChanges)
+    setMutableElements(loadChanges)
     message.success('Your changes have been loaded!')
   }
 
@@ -110,7 +112,7 @@ function SideMenu ({
     const changes = localStorage.getItem(LOCAL_STORAGE_KEY)
     if (changes) setLoadChanges(JSON.parse(changes))
     else if (changes === null) setLoadChanges([])
-  }, [items])
+  }, [])
 
   return (
     <>
@@ -204,7 +206,7 @@ function SideMenu ({
               key='5'
               icon={<CheckOutlined />}
               onClick={saveChanges}
-              disabled={items.length === 0}
+              disabled={mutableElements.length === 0}
             >
               Save changes
             </Menu.Item>
@@ -225,8 +227,9 @@ function SideMenu ({
 
 SideMenu.propTypes = {
   onAddElement: PropTypes.func.isRequired,
-  items: PropTypes.array.isRequired,
-  setItems: PropTypes.func.isRequired
+  mutableElements: PropTypes.array.isRequired,
+  setMutableElements: PropTypes.func.isRequired,
+  setImmutableElements: PropTypes.func.isRequired
 }
 
 export default SideMenu

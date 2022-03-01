@@ -1,75 +1,92 @@
-import { useRef, useEffect } from 'react';
-import { Rect, Transformer } from 'react-konva';
+import React, { useRef, useEffect } from 'react'
+import PropTypes from 'prop-types'
+import { Rect, Transformer } from 'react-konva'
 
-const MINIMAL_TRANSFORM_SIZE = 5;
+const MINIMAL_TRANSFORM_SIZE = 5
 
-export default function Element({
+function Element ({
   elementProps,
   isSelected,
   onSelect,
-  onChange,
+  onChange
 }) {
-  const { zoom, ...props } = elementProps;
-  const rectangleRef = useRef();
-  const transformRef = useRef();
+  const rectangleRef = useRef()
+  const transformRef = useRef()
 
-  const changeElement = changes => onChange({ ...props, ...changes });
+  const changeElement = changes => onChange({ ...elementProps, ...changes })
 
   const handleTransform = (oldBox, newBox) => {
     if (
       newBox.width < MINIMAL_TRANSFORM_SIZE ||
       newBox.height < MINIMAL_TRANSFORM_SIZE
-    )
-      return oldBox;
+    ) { return oldBox }
 
-    return newBox;
-  };
+    return newBox
+  }
 
   const handleDragEnd = event => {
     changeElement({
       x: event.target.x(),
       y: event.target.y(),
       width: event.target.attrs.width,
-      height: event.target.attrs.height,
-    });
-  };
+      height: event.target.attrs.height
+    })
+  }
 
   const handleTransformEnd = () => {
-    const node = rectangleRef.current;
-    const scaleX = node.scaleX();
-    const scaleY = node.scaleY();
+    const node = rectangleRef.current
+    const scaleX = node.scaleX()
+    const scaleY = node.scaleY()
 
-    node.scaleX(1);
-    node.scaleY(1);
+    node.scaleX(1)
+    node.scaleY(1)
 
     changeElement({
       x: node.x(),
       y: node.y(),
       width: Math.max(MINIMAL_TRANSFORM_SIZE, node.width() * scaleX),
-      height: Math.max(MINIMAL_TRANSFORM_SIZE, node.height() * scaleY),
-    });
-  };
+      height: Math.max(MINIMAL_TRANSFORM_SIZE, node.height() * scaleY)
+    })
+  }
 
   useEffect(() => {
     if (isSelected) {
-      transformRef.current.nodes([rectangleRef.current]);
-      transformRef.current.getLayer().batchDraw();
+      transformRef.current.nodes([rectangleRef.current])
+      transformRef.current.getLayer().batchDraw()
     }
-  }, [isSelected]);
+  }, [isSelected])
 
   return (
     <>
       <Rect
         onClick={onSelect}
         ref={rectangleRef}
-        {...props}
+        {...elementProps}
         draggable
         onDragEnd={handleDragEnd}
         onTransformEnd={handleTransformEnd}
       />
-      {isSelected ? (
+      {isSelected
+        ? (
         <Transformer ref={transformRef} boundBoxFunc={handleTransform} />
-      ) : null}
+          )
+        : null}
     </>
-  );
+  )
 }
+
+Element.propTypes = {
+  elementProps: PropTypes.shape({
+    id: PropTypes.string,
+    x: PropTypes.number,
+    y: PropTypes.number,
+    width: PropTypes.number,
+    height: PropTypes.number,
+    fill: PropTypes.string
+  }).isRequired,
+  isSelected: PropTypes.bool.isRequired,
+  onSelect: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired
+}
+
+export default Element

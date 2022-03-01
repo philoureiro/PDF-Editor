@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { v4 as uuidv4 } from 'uuid'
 import 'antd/dist/antd.css'
 
 import SideMenu from '../components/sideMenu'
-import DocumentContext from '../contexts/document'
+import { useDocument } from '../contexts/document'
 
 const DocumentContainer = dynamic(
   () => import('../components/documentContainer'),
@@ -23,32 +23,50 @@ const STYLE_MAIN = {
 }
 
 export default function Home () {
-  const [elements, setElements] = useState([])
+  const [mutableElements, setMutableElements] = useState([])
+  const [immutableElements, setImmutableElements] = useState([])
   const [mapContainerConfig, setMapContainerConfig] = useState({
     width: 0,
     height: 550
   })
 
+  const { scale } = useDocument()
+
   const handleAddElement = element => {
     const newElement = { ...element, x: 0, y: 0, id: uuidv4() }
-    setElements(prevElements => [...prevElements, newElement])
+    setImmutableElements(prevElements => [...prevElements, newElement])
+    setMutableElements(prevElements => [...prevElements, newElement])
   }
 
+  const resizeElementsByScale = () => {
+    const items = immutableElements.map(({ x, y, width, height, ...restElement }) => ({
+      ...restElement,
+      x: x * scale,
+      y: y * scale,
+      width: width * scale,
+      height: height * scale
+    }))
+    setMutableElements(items)
+  }
+
+  useEffect(() => {
+    resizeElementsByScale()
+  }, [scale, immutableElements])
+
   return (
-    <DocumentContext>
-    <main style={STYLE_MAIN}>
-      <SideMenu
-        onAddElement={handleAddElement}
-        items={elements}
-        setItems={setElements}
-      />
-      <DocumentContainer setDocumentSize={setMapContainerConfig} />
-      <MapContainer
-        config={mapContainerConfig}
-        items={elements}
-        setItems={setElements}
-      />
-    </main>
-    </DocumentContext>
+      <main style={STYLE_MAIN}>
+        <SideMenu
+          onAddElement={handleAddElement}
+          mutableElements={mutableElements}
+          setMutableElements={setMutableElements}
+          setImmutableElements={setImmutableElements}
+        />
+        <DocumentContainer setDocumentSize={setMapContainerConfig} />
+        <MapContainer
+          config={mapContainerConfig}
+          mutableElements={mutableElements}
+          setMutableElements={setMutableElements}
+        />
+      </main>
   )
 }
