@@ -6,8 +6,6 @@ export const DocContext = createContext();
 function DocumentContext({ children }) {
   const [url, setUrl] = useState("");
   const [scale, setScale] = useState(1);
-  const [initialWidth, setInitialWidth] = useState(0);
-  const [initialHeight, setInitialHeight] = useState(0);
   const [pagesHandler, setPagesHandler] = useState({
     currentPage: 1,
     totalPages: 1,
@@ -17,10 +15,6 @@ function DocumentContext({ children }) {
     url,
     setUrl,
     scale,
-    initialWidth,
-    setInitialWidth,
-    initialHeight,
-    setInitialHeight,
     setScale,
     pagesHandler,
     setPagesHandler,
@@ -36,28 +30,14 @@ DocumentContext.propTypes = {
 };
 
 export function useDocument() {
-  const {
-    url,
-    setUrl,
-    scale,
-    setScale,
-    initialHeight,
-    initialWidth,
-    setInitialHeight,
-    setInitialWidth,
-    pagesHandler,
-    setPagesHandler,
-  } = useContext(DocContext);
+  const { url, setUrl, scale, setScale, pagesHandler, setPagesHandler } =
+    useContext(DocContext);
 
   return {
     url,
     setUrl,
     scale,
     setScale,
-    initialHeight,
-    setInitialWidth,
-    setInitialHeight,
-    initialWidth,
     pagesHandler,
     setPagesHandler,
   };

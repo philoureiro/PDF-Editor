@@ -21,6 +21,16 @@ import { useDocument } from "../../contexts/document";
 
 const { SubMenu } = Menu;
 
+const STYLE_MENU = {
+  backgroundColor: "white",
+  boxShadow: "0 0.5rem 1rem black",
+  border: 0,
+  marginRight: "5vw",
+  maxWidth: "300px",
+  display: "flex",
+  flexDirection: "column",
+  height: "400px",
+};
 const LOCAL_STORAGE_KEY = "@pdfmap";
 
 function SideMenu({
@@ -122,117 +132,95 @@ function SideMenu({
         toggleVisible={toggleShowCreateModal}
         addElement={onAddElement}
       />
-      <div
-        style={{
-          minWidth: "300px",
-          height: "100%",
-          maxHeight: "500px",
-          display: "flex",
-          marginRight: "5vw",
-          left: 1,
-          position: "relative",
-        }}
+      <Button
+        type="primary"
+        onClick={toggleCollapsed}
+        style={{ marginBottom: 16 }}
       >
-        <div
-          style={{
-            minWidth: "300px",
-            display: "flex",
-            left: 10,
-            top: 10,
-          }}
+        {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
+      </Button>
+      <Menu
+        style={STYLE_MENU}
+        defaultSelectedKeys={["1"]}
+        mode="inline"
+        theme="light"
+        inlineCollapsed={collapsed}
+      >
+        <Menu.Item
+          key="1"
+          icon={<UploadOutlined />}
+          onClick={onClickInputDocument}
         >
-          <Button
-            type="primary"
-            onClick={toggleCollapsed}
-            style={{ marginBottom: 16 }}
+          Upload Document
+          <input
+            type="file"
+            onChange={handleSetUrlFromFile}
+            ref={inputDocumentRef}
+            hidden
+          />
+        </Menu.Item>
+        <SubMenu
+          key="sub1"
+          icon={<SettingOutlined />}
+          title="Document Settings"
+          disabled={!url}
+        >
+          <Menu.Item key="2">
+            <div style={{ display: "flex" }}>
+              <div onClick={decrementScale} style={{ flex: 1 }}>
+                <ZoomOutOutlined />
+              </div>
+              <div style={{ flex: 1 }}>{scale}x</div>
+              <div onClick={incrimentScale}>
+                <ZoomInOutlined />
+              </div>
+            </div>
+          </Menu.Item>
+          <Menu.Item key="3">
+            <div style={{ display: "flex" }}>
+              <div onClick={previousPage} style={{ flex: 1 }}>
+                <LeftOutlined />
+              </div>
+              <div style={{ flex: 1 }}>
+                {currentPage}/{totalPages}
+              </div>
+              <div onClick={nextPage}>
+                <RightOutlined />
+              </div>
+            </div>
+          </Menu.Item>
+        </SubMenu>
+        <SubMenu
+          key="sub2"
+          icon={<ToolOutlined />}
+          title="Map Tools"
+          disabled={!url}
+        >
+          <Menu.Item
+            key="4"
+            icon={<PlusOutlined />}
+            onClick={toggleShowCreateModal}
           >
-            {React.createElement(
-              collapsed ? MenuUnfoldOutlined : MenuFoldOutlined
-            )}
-          </Button>
-          <Menu
-            defaultSelectedKeys={["1"]}
-            mode="inline"
-            theme="light"
-            inlineCollapsed={collapsed}
+            Create Element
+          </Menu.Item>
+          <Menu.Item
+            key="5"
+            icon={<CheckOutlined />}
+            onClick={saveChanges}
+            disabled={mutableElements.length === 0}
           >
-            <Menu.Item
-              key="1"
-              icon={<UploadOutlined />}
-              onClick={onClickInputDocument}
-            >
-              Upload Document
-              <input
-                type="file"
-                onChange={handleSetUrlFromFile}
-                ref={inputDocumentRef}
-                hidden
-              />
-            </Menu.Item>
-            <SubMenu
-              key="sub1"
-              icon={<SettingOutlined />}
-              title="Document Settings"
-              disabled={!url}
-            >
-              <Menu.Item key="2">
-                <div style={{ display: "flex" }}>
-                  <div onClick={decrementScale} style={{ flex: 1 }}>
-                    <ZoomOutOutlined />
-                  </div>
-                  <div style={{ flex: 1 }}>{scale}x</div>
-                  <div onClick={incrimentScale}>
-                    <ZoomInOutlined />
-                  </div>
-                </div>
-              </Menu.Item>
-              <Menu.Item key="3">
-                <div style={{ display: "flex" }}>
-                  <div onClick={previousPage} style={{ flex: 1 }}>
-                    <LeftOutlined />
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    {currentPage}/{totalPages}
-                  </div>
-                  <div onClick={nextPage}>
-                    <RightOutlined />
-                  </div>
-                </div>
-              </Menu.Item>
-            </SubMenu>
-            <SubMenu
-              key="sub2"
-              icon={<ToolOutlined />}
-              title="Map Tools"
-              disabled={!url}
-            >
-              <Menu.Item
-                key="4"
-                icon={<PlusOutlined />}
-                onClick={toggleShowCreateModal}
-              >
-                Create Element
-              </Menu.Item>
-              <Menu.Item
-                key="5"
-                icon={<CheckOutlined />}
-                onClick={saveChanges}
-                disabled={mutableElements.length === 0}
-              >
-                Save changes
-              </Menu.Item>
-              <Menu.Item
-                key="6"
-                icon={<ReloadOutlined />}
-                onClick={loadStoragedChanges}
-                disabled={loadChanges.length === 0}
-              >
-                Load changes
-              </Menu.Item>
-            </SubMenu>
-          </Menu>
-        </div>
-      </div>
+            Save changes
+          </Menu.Item>
+          <Menu.Item
+            key="6"
+            icon={<ReloadOutlined />}
+            onClick={loadStoragedChanges}
+            disabled={loadChanges.length === 0}
+          >
+            Load changes
+          </Menu.Item>
+        </SubMenu>
+      </Menu>
     </>
   );
 }

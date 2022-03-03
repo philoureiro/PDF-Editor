@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import { v4 as uuidv4 } from "uuid";
 import "antd/dist/antd.css";
@@ -38,7 +38,7 @@ const STYLE_CONTAINER = {
 
 const STYLE_BUTTON_CONTAINER = {
   display: "flex",
-  backgroundColor: "##1890ff",
+  backgroundColor: "white",
   flexDirection: "row",
   alignItems: "center",
   position: "absolute",
@@ -46,9 +46,42 @@ const STYLE_BUTTON_CONTAINER = {
   right: "2vw",
   width: "190px",
   borderRadius: "5px",
-  boxShadow: "1px 0px 0px 1px gray",
+  boxShadow: "0 0.5rem 1rem black",
   alignItems: "center",
   justifyContent: "space-around",
+};
+
+const STYLE_PDF_VIEWER = {
+  backgroundColor: "#2a2b2c",
+  display: "flex",
+  position: "relative",
+  alignItems: "center",
+  justifyContent: "inherit",
+  padding: 25,
+  borderRadius: "10px",
+  boxShadow: "0 0.5rem 1rem black",
+};
+
+const STYLE_SCROLLBAR_CONTAINER = {
+  backgroundColor: "transparent",
+  display: "block",
+  alignItems: "center",
+  justifyContent: "center",
+  marginBottom: "20px",
+  marginTop: "20px",
+  padding: 20,
+  // overflow: "scroll",
+  scrollSnapAlign: "center",
+  // width: 650,
+
+  // minHeight: 842 + 10,
+  // minWidth: 595 + 10,
+  // maxHeight: 842 + 10,
+  // maxWidth: 595 + 10,
+  // minHeight: 842 + 10,
+  // minWidth: 595 + 10,
+
+  position: "relative",
 };
 
 export default function Home() {
@@ -59,7 +92,10 @@ export default function Home() {
     width: 0,
     height: 550,
   });
-
+  const [initialDimmensionsByPDF, setInitialDimmensionsByPDF] = useState({
+    width: 0,
+    height: 0,
+  });
   const { scale, url, width, height, setHeight, setWidth } = useDocument();
 
   const handleAddElement = (element) => {
@@ -85,8 +121,9 @@ export default function Home() {
     resizeElementsByScale();
   }, [scale, immutableElements]);
 
-  console.log("width", width);
-  console.log("height", height);
+  console.log("VOLTOU", initialDimmensionsByPDF);
+  console.log("atual", mapContainerConfig);
+
   return (
     <main style={STYLE_MAIN}>
       <div style={STYLE_CONTAINER}>
@@ -99,31 +136,35 @@ export default function Home() {
         {url && (
           <div
             style={{
-              backgroundColor: "#2a2b2c",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
-              marginBottom: "20px",
-              marginTop: "20px",
-              padding: 25,
-              borderRadius: "10px",
-              //  maxHeight: mapContainerConfig?.height + 25,
-              // maxWidth: mapContainerConfig?.width + 25,
-              // overflowX: true,
+              ...STYLE_SCROLLBAR_CONTAINER,
+              width: initialDimmensionsByPDF?.width + 100,
+              height: initialDimmensionsByPDF?.height + 100,
+              overflow: `${
+                mapContainerConfig?.width > initialDimmensionsByPDF?.width + 100
+                  ? "scroll"
+                  : "hidden"
+              }`,
             }}
           >
-            <DocumentContainer
-              dimmensions={mapContainerConfig}
-              setDocumentSize={setMapContainerConfig}
-            />
-            {!hidehighlighter && (
-              <MapContainer
-                config={mapContainerConfig}
-                mutableElements={mutableElements}
-                setMutableElements={setMutableElements}
+            <div
+              style={{
+                ...STYLE_PDF_VIEWER,
+                width: mapContainerConfig?.width + 50,
+                height: mapContainerConfig?.height + 50,
+              }}
+            >
+              <DocumentContainer
+                setDocumentSize={setMapContainerConfig}
+                setInitialDimmensionsByPDF={setInitialDimmensionsByPDF}
               />
-            )}
+              {!hidehighlighter && (
+                <MapContainer
+                  config={mapContainerConfig}
+                  mutableElements={mutableElements}
+                  setMutableElements={setMutableElements}
+                />
+              )}
+            </div>
           </div>
         )}
       </div>
