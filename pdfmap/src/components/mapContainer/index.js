@@ -6,8 +6,12 @@ import Element from "../element";
 
 const CONTAINER_STYLE = {
   position: "absolute",
-  top: 0,
-  border: "1px solid #f00",
+  border: "3px solid red",
+  display: "flex",
+  zIndex: 0,
+  position: "absolute",
+
+  //backgroundColor: "blue", position: "absolute", opacity: 0.2
 };
 
 function MapContainer({ config, mutableElements, setMutableElements }) {
@@ -25,24 +29,25 @@ function MapContainer({ config, mutableElements, setMutableElements }) {
   };
 
   return (
-    <Stage
-      width={config.width}
-      height={config.height}
-      onClick={checkDeselect}
-      style={CONTAINER_STYLE}
-    >
-      <Layer>
-        {mutableElements.map(({ id, ...elementProps }, index) => (
-          <Element
-            key={id}
-            elementProps={{ ...elementProps, id }}
-            isSelected={id === selectedItem}
-            onSelect={() => setSelectedItem(id)}
-            onChange={(changes) => handleChangeElement({ changes, index })}
-          />
-        ))}
-      </Layer>
-    </Stage>
+    <div style={CONTAINER_STYLE}>
+      <Stage
+        width={config.width}
+        height={config.height}
+        onClick={checkDeselect}
+      >
+        <Layer>
+          {mutableElements.map(({ id, ...elementProps }, index) => (
+            <Element
+              key={id}
+              elementProps={{ ...elementProps, id }}
+              isSelected={id === selectedItem}
+              onSelect={() => setSelectedItem(id)}
+              onChange={(changes) => handleChangeElement({ changes, index })}
+            />
+          ))}
+        </Layer>
+      </Stage>
+    </div>
   );
 }
 
