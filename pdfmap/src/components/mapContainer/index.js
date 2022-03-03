@@ -10,8 +10,6 @@ const CONTAINER_STYLE = {
   display: "flex",
   zIndex: 0,
   position: "absolute",
-
-  //backgroundColor: "blue", position: "absolute", opacity: 0.2
 };
 
 function MapContainer({ config, mutableElements, setMutableElements }) {
@@ -55,6 +53,7 @@ MapContainer.propTypes = {
   config: PropTypes.shape({
     width: PropTypes.number,
     height: PropTypes.number,
+    opacity: 0.2,
   }).isRequired,
   mutableElements: PropTypes.arrayOf(
     PropTypes.shape({

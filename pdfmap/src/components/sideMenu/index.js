@@ -125,6 +125,7 @@ function SideMenu({
       <div
         style={{
           minWidth: "300px",
+          height: "100%",
           maxHeight: "500px",
           display: "flex",
           marginRight: "5vw",

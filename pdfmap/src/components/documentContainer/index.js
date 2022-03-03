@@ -5,7 +5,14 @@ import { useDocument } from "../../contexts/document";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
 function DocumentContainer({ setDocumentSize, dimmensions }) {
-  const { pagesHandler, setPagesHandler, scale, url } = useDocument();
+  const {
+    pagesHandler,
+    setPagesHandler,
+    scale,
+    url,
+    setInitialHeight,
+    setInitialWidth,
+  } = useDocument();
 
   const documentRef = useRef(null);
 
@@ -15,10 +22,14 @@ function DocumentContainer({ setDocumentSize, dimmensions }) {
   const getDocumentPageSize = () => {
     const { width, height } = documentRef.current.getBoundingClientRect();
     console.log(width, height);
+    if (scale === 1) {
+      console.log(scale);
+      setInitialWidth(width);
+      setInitialHeight(height);
+    }
     setDocumentSize({ width, height });
   };
 
-  console.log("dimmensions", dimmensions);
   return (
     <div
       style={{
@@ -33,6 +44,7 @@ function DocumentContainer({ setDocumentSize, dimmensions }) {
     >
       <Document
         file={url}
+        noData=""
         onLoadSuccess={setTotalPages}
         onLoadError={console.error}
       >

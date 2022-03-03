@@ -18,6 +18,7 @@ const MapContainer = dynamic(() => import("../components/mapContainer"), {
 
 const STYLE_MAIN = {
   width: "100vw",
+  height: "100%",
   display: "flex",
   flexDirection: "row",
   alignItems: "center",
@@ -59,7 +60,7 @@ export default function Home() {
     height: 550,
   });
 
-  const { scale } = useDocument();
+  const { scale, url, width, height, setHeight, setWidth } = useDocument();
 
   const handleAddElement = (element) => {
     const newElement = { ...element, x: 0, y: 0, id: uuidv4() };
@@ -84,6 +85,8 @@ export default function Home() {
     resizeElementsByScale();
   }, [scale, immutableElements]);
 
+  console.log("width", width);
+  console.log("height", height);
   return (
     <main style={STYLE_MAIN}>
       <div style={STYLE_CONTAINER}>
@@ -93,31 +96,36 @@ export default function Home() {
           setMutableElements={setMutableElements}
           setImmutableElements={setImmutableElements}
         />
-        <div
-          style={{
-            backgroundColor: "#2a2b2c",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-            marginBottom: "20px",
-            marginTop: "20px",
-            padding: 25,
-            borderRadius: "10px",
-          }}
-        >
-          <DocumentContainer
-            dimmensions={mapContainerConfig}
-            setDocumentSize={setMapContainerConfig}
-          />
-          {!hidehighlighter && (
-            <MapContainer
-              config={mapContainerConfig}
-              mutableElements={mutableElements}
-              setMutableElements={setMutableElements}
+        {url && (
+          <div
+            style={{
+              backgroundColor: "#2a2b2c",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column",
+              marginBottom: "20px",
+              marginTop: "20px",
+              padding: 25,
+              borderRadius: "10px",
+              //  maxHeight: mapContainerConfig?.height + 25,
+              // maxWidth: mapContainerConfig?.width + 25,
+              // overflowX: true,
+            }}
+          >
+            <DocumentContainer
+              dimmensions={mapContainerConfig}
+              setDocumentSize={setMapContainerConfig}
             />
-          )}
-        </div>
+            {!hidehighlighter && (
+              <MapContainer
+                config={mapContainerConfig}
+                mutableElements={mutableElements}
+                setMutableElements={setMutableElements}
+              />
+            )}
+          </div>
+        )}
       </div>
 
       <Button

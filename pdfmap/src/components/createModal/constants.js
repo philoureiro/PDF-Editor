@@ -14,21 +14,21 @@ const SIZE = {
 };
 
 const TYPE_OPTIONS = {
-  text: { ...SIZE.default, fill: '#2146FF' },
-  number: { ...SIZE.default, fill: '#400CA5' },
-  date: { ...SIZE.default, fill: '#A8194B' },
-  checkbox: { ...SIZE.rect, fill: '#F7540A' },
-  dropdown: { ...SIZE.default, fill: '#FEFE35' },
-  textarea: { ...SIZE.large, fill: '#68B42F' },
+  text: { ...SIZE.default, fill: "#2146FF", opacity: 0.2 },
+  number: { ...SIZE.default, fill: "#400CA5", opacity: 0.2 },
+  date: { ...SIZE.default, fill: "#A8194B", opacity: 0.2 },
+  checkbox: { ...SIZE.rect, fill: "#F7540A", opacity: 0.2 },
+  dropdown: { ...SIZE.default, fill: "#FEFE35", opacity: 0.2 },
+  textarea: { ...SIZE.large, fill: "#68B42F", opacity: 0.2 },
 };
 
 export const SELECT_TYPE_OPTIONS = [
-  { label: 'Text', value: 'text' },
-  { label: 'Number', value: 'number' },
-  { label: 'Date', value: 'date' },
-  { label: 'Checkbox', value: 'checkbox' },
-  { label: 'Dropdown', value: 'dropdown' },
-  { label: 'Text Area', value: 'textarea' },
+  { label: "Text", value: "text" },
+  { label: "Number", value: "number" },
+  { label: "Date", value: "date" },
+  { label: "Checkbox", value: "checkbox" },
+  { label: "Dropdown", value: "dropdown" },
+  { label: "Text Area", value: "textarea" },
 ];
 
 export const INITIAL_FORM_VALUES = {
