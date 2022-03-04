@@ -2,38 +2,23 @@ import React, { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import { v4 as uuidv4 } from "uuid";
 import "antd/dist/antd.css";
-import { Button, message } from "antd";
-import { EyeOutlined, EyeInvisibleTwoTone } from "@ant-design/icons";
 import { useDocument } from "../contexts/document";
 import SideMenu from "../components/sideMenu";
 
 const PDFHighlighter = dynamic(() => import("../components/PDFHighlighter"));
-const MenuOfElements = dynamic(() => import("../components/menuOfElements"));
+const MenuOfElements = dynamic(() => import("../components/MenuOfElements"));
+const ActionsButtons = dynamic(() => import("../components/ActionsButtons"));
 const STYLE_MAIN = {
-  width: "100rem",
+  width: "100%",
   height: "100%",
   minHeight: "100vh",
   display: "flex",
   right: "0px",
   flexDirection: "row",
-  alignItems: "flex-start",
+  alignItems: "center",
   justifyContent: "space-between",
-  backgroundColor: "#a0a0a0",
-};
-
-const STYLE_BUTTON_CONTAINER = {
-  display: "flex",
-  backgroundColor: "white",
-  flexDirection: "row",
-  alignItems: "center",
-  position: "fixed",
-  top: "2vh",
-  right: "2vw",
-  width: "190px",
-  borderRadius: "5px",
-  boxShadow: "0 0.5rem 1rem black",
-  alignItems: "center",
-  justifyContent: "space-around",
+  //backgroundColor: "#a0a0a0",
+  backgroundColor: "transparent",
 };
 
 export default function Home() {
@@ -94,18 +79,10 @@ export default function Home() {
           // position: "fixed",
         }}
       >
-        <Button
-          onClick={() => setHideHighlighter(!hidehighlighter)}
-          style={STYLE_BUTTON_CONTAINER}
-        >
-          {`${hidehighlighter ? "Mostrar marcação" : "Ocultar marcação"}`}
-          {hidehighlighter ? (
-            <EyeOutlined style={{ backgroundColor: "white" }} />
-          ) : (
-            <EyeInvisibleTwoTone style={{ backgroundColor: "white" }} />
-          )}
-        </Button>
-
+        <ActionsButtons
+          hidehighlighter={hidehighlighter}
+          setHideHighlighter={setHideHighlighter}
+        />
         <MenuOfElements />
       </div>
     </main>

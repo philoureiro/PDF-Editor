@@ -23,15 +23,15 @@ const { SubMenu } = Menu;
 
 const STYLE_MENU = {
   backgroundColor: "white",
-  boxShadow: "0 0.5rem 1rem black",
+  boxShadow: "0 0.3rem 0.5rem black",
   border: 0,
   marginRight: "5vw",
   maxWidth: "300px",
   display: "flex",
   position: "relative",
   flexDirection: "column",
+  borderRadius: "10px",
   // maxHeight: 700,
-  overflox: "scroll",
 };
 const STYLE_MENU_CONTAINER = {
   backgroundColor: "transparent",
@@ -39,9 +39,9 @@ const STYLE_MENU_CONTAINER = {
   justifyContent: "flex-start",
   alignItems: "flex-start",
   top: 20,
+  left: "1vw",
   display: "flex",
   position: "fixed",
-  overflox: "scroll",
 };
 
 const LOCAL_STORAGE_KEY = "@pdfmap";
@@ -156,11 +156,14 @@ function SideMenu({
           <div
             style={{
               backgroundColor: "#e6f7ff",
-              height: "30px",
+              height: "35px",
               justifyContent: "center",
               alignItems: "center",
               display: "flex",
               padding: "2px",
+              borderTopLeftRadius: "10px",
+              borderTopRightRadius: "10px",
+              boxShadow: "0 0.1rem 0.2rem black",
             }}
           >
             <h3

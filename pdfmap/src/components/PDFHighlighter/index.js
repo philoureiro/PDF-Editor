@@ -9,13 +9,15 @@ const MapContainer = dynamic(() => import("../mapContainer"), {
 });
 
 const STYLE_SCROLLBAR_CONTAINER = {
-  backgroundColor: "transparent",
+  backgroundColor: "#cecece",
   display: "block",
   marginBottom: "20px",
-  padding: 20,
+  padding: 3,
   marginRight: 50,
   maxWidth: 900,
-  marginLeft: 300,
+  borderRadius: 15,
+  marginLeft: 250,
+  boxShadow: "0 0 1em black",
 };
 
 const STYLE_PDF_VIEWER = {
@@ -24,9 +26,9 @@ const STYLE_PDF_VIEWER = {
   position: "relative",
   alignItems: "center",
   justifyContent: "center",
-  padding: 25,
+  // boxShadow: "0 0.5rem 1rem black",
+
   borderRadius: "10px",
-  boxShadow: "0 0.5rem 1rem black",
 };
 
 const PDFHighlighter = ({
@@ -54,7 +56,7 @@ const PDFHighlighter = ({
             alignItems: "center",
             marginTop: 20,
             backgroundColor: "transparent",
-            marginLeft: "300px",
+            marginLeft: "250px",
             maxWidth: "900px",
           }}
         >
@@ -78,8 +80,8 @@ const PDFHighlighter = ({
         <div
           style={{
             ...STYLE_PDF_VIEWER,
-            width: mapContainerConfig?.width + 50,
-            height: mapContainerConfig?.height + 50,
+            width: mapContainerConfig?.width + 30,
+            height: mapContainerConfig?.height + 30,
           }}
         >
           <DocumentContainer

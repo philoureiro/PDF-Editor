@@ -14,6 +14,13 @@ import {
   RightOutlined,
   CheckOutlined,
   ReloadOutlined,
+  ApartmentOutlined,
+  FontSizeOutlined,
+  FieldNumberOutlined,
+  CheckSquareOutlined,
+  FieldTimeOutlined,
+  BorderOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 
 import CreateModal from "../createModal";
@@ -22,27 +29,29 @@ import { useDocument } from "../../contexts/document";
 const { SubMenu } = Menu;
 
 const STYLE_MENU_CONTAINER = {
-  backgroundColor: "red",
+  backgroundColor: "transparent",
   flexDirection: "column",
-  justifyContent: "flex-start",
+  justifyContent: "right",
   alignItems: "flex-end",
   top: "9vh",
   display: "flex",
   position: "fixed",
-  right: 0,
+  right: "1vw",
+  width: 150,
+  //   height: 250,
 };
 
 const STYLE_MENU = {
   backgroundColor: "white",
-  boxShadow: "0 0.5rem 1rem black",
+  boxShadow: "0 0.3rem 0.5rem black",
   border: 0,
+  borderRadius: "10px",
+
   maxWidth: "300px",
   display: "flex",
   position: "relative",
   flexDirection: "column",
-  right: 0,
-  position: "fixed",
-  top: "9vh",
+  // maxHeight: 700,
 };
 
 const LOCAL_STORAGE_KEY = "@pdfmap";
@@ -63,41 +72,108 @@ const MenuOfElements = () => {
     setUrl(null);
   };
   return (
-    <Menu
-      style={STYLE_MENU}
-      defaultSelectedKeys={["1"]}
-      mode="vertical"
-      theme="light"
-      inlineCollapsed={collapsed}
-    >
-      <div
-        style={{
-          backgroundColor: "#f1c845",
-          height: "30px",
-          justifyContent: "center",
-          alignItems: "center",
-          display: "flex",
-          padding: "2px",
-        }}
+    <div style={STYLE_MENU_CONTAINER}>
+      <Menu
+        style={STYLE_MENU}
+        defaultSelectedKeys={["1"]}
+        mode="vertical"
+        theme="light"
+        color="red"
+        inlineCollapsed={collapsed}
       >
-        <h3
+        <div
           style={{
-            fontSize: "14px",
-            textAlign: "justify",
-            marginTop: "5px",
+            backgroundColor: "#f1c845",
+            height: "30px",
+            justifyContent: "center",
+            alignItems: "center",
+            display: "flex",
+            padding: "2px",
+            borderTopLeftRadius: "10px",
+            borderTopRightRadius: "10px",
+            boxShadow: "0 0.1rem 0.2rem black",
           }}
         >
-          Elements
-        </h3>
-      </div>
+          <h3
+            style={{
+              fontSize: "14px",
+              textAlign: "justify",
+              marginTop: "5px",
+            }}
+          >
+            Elements
+          </h3>
+        </div>
 
-      <SubMenu
-        key="sub2"
-        icon={<ToolOutlined />}
-        title="Map Tools"
-        // disabled={!url}
-      ></SubMenu>
-    </Menu>
+        <SubMenu
+          key="sub1"
+          icon={<FontSizeOutlined />}
+          title="Text"
+          // disabled={!url}
+        >
+          <Menu.Item
+            key="1"
+            icon={<DeleteOutlined />}
+            // onClick={loadStoragedChanges}
+            // disabled={loadChanges.length === 0}
+          >
+            text 1
+          </Menu.Item>
+          <Menu.Item
+            key="2"
+            icon={<DeleteOutlined />}
+            // onClick={loadStoragedChanges}
+            // disabled={loadChanges.length === 0}
+          >
+            text 2
+          </Menu.Item>
+          <Menu.Item
+            key="3"
+            icon={<DeleteOutlined />}
+            // onClick={loadStoragedChanges}
+            // disabled={loadChanges.length === 0}
+          >
+            text 3
+          </Menu.Item>
+        </SubMenu>
+
+        <SubMenu
+          key="sub2"
+          icon={<FieldNumberOutlined />}
+          title="Number"
+          // disabled={!url}
+        >
+          Number
+        </SubMenu>
+
+        <SubMenu
+          key="sub3"
+          icon={<FieldTimeOutlined />}
+          title="Date"
+          // disabled={!url}
+        >
+          Date
+        </SubMenu>
+
+        <SubMenu
+          key="sub4"
+          icon={<CheckSquareOutlined />}
+          title="Checkbox"
+          // disabled={!url}
+        >
+          Checkbox
+        </SubMenu>
+
+        <SubMenu
+          key="sub5"
+          icon={<BorderOutlined />}
+          title="TextArea"
+          // disabled={!url}
+        >
+          TextArea
+        </SubMenu>
+      </Menu>
+    </div>
   );
 };
 

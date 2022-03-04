@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Stage, Layer } from "react-konva";
-
 import Element from "../element";
 
 const CONTAINER_STYLE = {
   position: "absolute",
-  border: "3px solid red",
+  border: "3px solid #ff1f1f",
   display: "flex",
   zIndex: 0,
   position: "absolute",
