@@ -30,6 +30,8 @@ const STYLE_MENU = {
   display: "flex",
   position: "relative",
   flexDirection: "column",
+  // maxHeight: 700,
+  overflox: "scroll",
 };
 const STYLE_MENU_CONTAINER = {
   backgroundColor: "transparent",
@@ -39,6 +41,7 @@ const STYLE_MENU_CONTAINER = {
   top: 20,
   display: "flex",
   position: "fixed",
+  overflox: "scroll",
 };
 
 const LOCAL_STORAGE_KEY = "@pdfmap";
@@ -148,17 +151,29 @@ function SideMenu({
           defaultSelectedKeys={["1"]}
           mode="inline"
           theme="light"
-          inlineCollapsed={collapsed}
+          inlineCollapsed={true}
         >
-          <Button
-            type="primary"
-            onClick={toggleCollapsed}
-            style={{ marginBottom: 16 }}
+          <div
+            style={{
+              backgroundColor: "#e6f7ff",
+              height: "30px",
+              justifyContent: "center",
+              alignItems: "center",
+              display: "flex",
+              padding: "2px",
+            }}
           >
-            {React.createElement(
-              collapsed ? MenuUnfoldOutlined : MenuFoldOutlined
-            )}
-          </Button>
+            <h3
+              style={{
+                fontSize: "14px",
+                textAlign: "justify",
+                marginTop: "5px",
+              }}
+            >
+              Map Tools
+            </h3>
+          </div>
+
           <Menu.Item
             key="1"
             icon={<UploadOutlined />}

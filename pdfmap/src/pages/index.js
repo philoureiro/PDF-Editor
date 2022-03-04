@@ -8,6 +8,7 @@ import { useDocument } from "../contexts/document";
 import SideMenu from "../components/sideMenu";
 
 const PDFHighlighter = dynamic(() => import("../components/PDFHighlighter"));
+const MenuOfElements = dynamic(() => import("../components/menuOfElements"));
 const STYLE_MAIN = {
   width: "100rem",
   height: "100%",
@@ -16,18 +17,8 @@ const STYLE_MAIN = {
   right: "0px",
   flexDirection: "row",
   alignItems: "flex-start",
-  justifyContent: "top",
+  justifyContent: "space-between",
   backgroundColor: "#a0a0a0",
-};
-
-const STYLE_SIDE_MENU_CONTAINER = {
-  display: "flex",
-  top: 0,
-  left: 10,
-  backgroundColor: "green",
-  width: "400px",
-  height: "100rem",
-  flexDirection: "row",
 };
 
 const STYLE_BUTTON_CONTAINER = {
@@ -50,7 +41,7 @@ export default function Home() {
   const [hidehighlighter, setHideHighlighter] = useState(false);
   const [immutableElements, setImmutableElements] = useState([]);
 
-  const { scale, url, width, height, setHeight, setWidth } = useDocument();
+  const { scale, url } = useDocument();
 
   const handleAddElement = (element) => {
     const newElement = { ...element, x: 0, y: 0, id: uuidv4() };
@@ -90,17 +81,33 @@ export default function Home() {
         setMutableElements={setMutableElements}
         setImmutableElements={setImmutableElements}
       />
-      <Button
-        onClick={() => setHideHighlighter(!hidehighlighter)}
-        style={STYLE_BUTTON_CONTAINER}
+
+      <div
+        style={{
+          backgroundColor: "black",
+          display: "flex",
+          // minHeight: "2000px",
+          justifyContent: "flex-start",
+          alignItems: "flex-end",
+          flexDirection: "column",
+          right: 0,
+          // position: "fixed",
+        }}
       >
-        {`${hidehighlighter ? "Mostrar marcação" : "Ocultar marcação"}`}
-        {hidehighlighter ? (
-          <EyeOutlined style={{ backgroundColor: "white" }} />
-        ) : (
-          <EyeInvisibleTwoTone style={{ backgroundColor: "white" }} />
-        )}
-      </Button>
+        <Button
+          onClick={() => setHideHighlighter(!hidehighlighter)}
+          style={STYLE_BUTTON_CONTAINER}
+        >
+          {`${hidehighlighter ? "Mostrar marcação" : "Ocultar marcação"}`}
+          {hidehighlighter ? (
+            <EyeOutlined style={{ backgroundColor: "white" }} />
+          ) : (
+            <EyeInvisibleTwoTone style={{ backgroundColor: "white" }} />
+          )}
+        </Button>
+
+        <MenuOfElements />
+      </div>
     </main>
   );
 }
