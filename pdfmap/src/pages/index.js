@@ -4,35 +4,29 @@ import { v4 as uuidv4 } from "uuid";
 import "antd/dist/antd.css";
 import { Button, message } from "antd";
 import { EyeOutlined, EyeInvisibleTwoTone } from "@ant-design/icons";
-
-import SideMenu from "../components/sideMenu";
 import { useDocument } from "../contexts/document";
+import SideMenu from "../components/sideMenu";
 
-const DocumentContainer = dynamic(
-  () => import("../components/documentContainer"),
-  { ssr: false }
-);
-const MapContainer = dynamic(() => import("../components/mapContainer"), {
-  ssr: false,
-});
-
+const PDFHighlighter = dynamic(() => import("../components/PDFHighlighter"));
 const STYLE_MAIN = {
-  width: "100vw",
+  width: "100rem",
   height: "100%",
+  minHeight: "100vh",
   display: "flex",
+  right: "0px",
   flexDirection: "row",
-  alignItems: "center",
-  justifyContent: "center",
-  position: "relative",
-  backgroundColor: "#ebcea3",
+  alignItems: "flex-start",
+  justifyContent: "top",
+  backgroundColor: "#a0a0a0",
 };
 
-const STYLE_CONTAINER = {
+const STYLE_SIDE_MENU_CONTAINER = {
   display: "flex",
-  backgroundColor: "transparent",
-  width: "100%",
-  height: "100%",
-  left: 0,
+  top: 0,
+  left: 10,
+  backgroundColor: "green",
+  width: "400px",
+  height: "100rem",
   flexDirection: "row",
 };
 
@@ -41,8 +35,8 @@ const STYLE_BUTTON_CONTAINER = {
   backgroundColor: "white",
   flexDirection: "row",
   alignItems: "center",
-  position: "absolute",
-  top: "3vh",
+  position: "fixed",
+  top: "2vh",
   right: "2vw",
   width: "190px",
   borderRadius: "5px",
@@ -51,51 +45,11 @@ const STYLE_BUTTON_CONTAINER = {
   justifyContent: "space-around",
 };
 
-const STYLE_PDF_VIEWER = {
-  backgroundColor: "#2a2b2c",
-  display: "flex",
-  position: "relative",
-  alignItems: "center",
-  justifyContent: "inherit",
-  padding: 25,
-  borderRadius: "10px",
-  boxShadow: "0 0.5rem 1rem black",
-};
-
-const STYLE_SCROLLBAR_CONTAINER = {
-  backgroundColor: "transparent",
-  display: "block",
-  alignItems: "center",
-  justifyContent: "center",
-  marginBottom: "20px",
-  marginTop: "20px",
-  padding: 20,
-  // overflow: "scroll",
-  scrollSnapAlign: "center",
-  // width: 650,
-
-  // minHeight: 842 + 10,
-  // minWidth: 595 + 10,
-  // maxHeight: 842 + 10,
-  // maxWidth: 595 + 10,
-  // minHeight: 842 + 10,
-  // minWidth: 595 + 10,
-
-  position: "relative",
-};
-
 export default function Home() {
   const [mutableElements, setMutableElements] = useState([]);
   const [hidehighlighter, setHideHighlighter] = useState(false);
   const [immutableElements, setImmutableElements] = useState([]);
-  const [mapContainerConfig, setMapContainerConfig] = useState({
-    width: 0,
-    height: 550,
-  });
-  const [initialDimmensionsByPDF, setInitialDimmensionsByPDF] = useState({
-    width: 0,
-    height: 0,
-  });
+
   const { scale, url, width, height, setHeight, setWidth } = useDocument();
 
   const handleAddElement = (element) => {
@@ -121,54 +75,21 @@ export default function Home() {
     resizeElementsByScale();
   }, [scale, immutableElements]);
 
-  console.log("VOLTOU", initialDimmensionsByPDF);
-  console.log("atual", mapContainerConfig);
-
   return (
     <main style={STYLE_MAIN}>
-      <div style={STYLE_CONTAINER}>
-        <SideMenu
-          onAddElement={handleAddElement}
+      {url && (
+        <PDFHighlighter
+          hidehighlighter={hidehighlighter}
           mutableElements={mutableElements}
           setMutableElements={setMutableElements}
-          setImmutableElements={setImmutableElements}
         />
-        {url && (
-          <div
-            style={{
-              ...STYLE_SCROLLBAR_CONTAINER,
-              width: initialDimmensionsByPDF?.width + 100,
-              height: initialDimmensionsByPDF?.height + 100,
-              overflow: `${
-                mapContainerConfig?.width > initialDimmensionsByPDF?.width + 100
-                  ? "scroll"
-                  : "hidden"
-              }`,
-            }}
-          >
-            <div
-              style={{
-                ...STYLE_PDF_VIEWER,
-                width: mapContainerConfig?.width + 50,
-                height: mapContainerConfig?.height + 50,
-              }}
-            >
-              <DocumentContainer
-                setDocumentSize={setMapContainerConfig}
-                setInitialDimmensionsByPDF={setInitialDimmensionsByPDF}
-              />
-              {!hidehighlighter && (
-                <MapContainer
-                  config={mapContainerConfig}
-                  mutableElements={mutableElements}
-                  setMutableElements={setMutableElements}
-                />
-              )}
-            </div>
-          </div>
-        )}
-      </div>
-
+      )}
+      <SideMenu
+        onAddElement={handleAddElement}
+        mutableElements={mutableElements}
+        setMutableElements={setMutableElements}
+        setImmutableElements={setImmutableElements}
+      />
       <Button
         onClick={() => setHideHighlighter(!hidehighlighter)}
         style={STYLE_BUTTON_CONTAINER}

@@ -28,9 +28,16 @@ const STYLE_MENU = {
   marginRight: "5vw",
   maxWidth: "300px",
   display: "flex",
+  position: "relative",
   flexDirection: "column",
-  height: "400px",
 };
+const STYLE_MENU_CONTAINER = {
+  backgroundColor: "transparent",
+  top: 0,
+  display: "flex",
+  position: "fixed",
+};
+
 const LOCAL_STORAGE_KEY = "@pdfmap";
 
 function SideMenu({
@@ -44,7 +51,7 @@ function SideMenu({
 
   const { currentPage, totalPages } = pagesHandler;
 
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [loadChanges, setLoadChanges] = useState([]);
 
@@ -132,95 +139,99 @@ function SideMenu({
         toggleVisible={toggleShowCreateModal}
         addElement={onAddElement}
       />
-      <Button
-        type="primary"
-        onClick={toggleCollapsed}
-        style={{ marginBottom: 16 }}
-      >
-        {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
-      </Button>
-      <Menu
-        style={STYLE_MENU}
-        defaultSelectedKeys={["1"]}
-        mode="inline"
-        theme="light"
-        inlineCollapsed={collapsed}
-      >
-        <Menu.Item
-          key="1"
-          icon={<UploadOutlined />}
-          onClick={onClickInputDocument}
+      <div style={STYLE_MENU_CONTAINER}>
+        <Button
+          type="primary"
+          onClick={toggleCollapsed}
+          style={{ marginBottom: 16 }}
         >
-          Upload Document
-          <input
-            type="file"
-            onChange={handleSetUrlFromFile}
-            ref={inputDocumentRef}
-            hidden
-          />
-        </Menu.Item>
-        <SubMenu
-          key="sub1"
-          icon={<SettingOutlined />}
-          title="Document Settings"
-          disabled={!url}
-        >
-          <Menu.Item key="2">
-            <div style={{ display: "flex" }}>
-              <div onClick={decrementScale} style={{ flex: 1 }}>
-                <ZoomOutOutlined />
-              </div>
-              <div style={{ flex: 1 }}>{scale}x</div>
-              <div onClick={incrimentScale}>
-                <ZoomInOutlined />
-              </div>
-            </div>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <div style={{ display: "flex" }}>
-              <div onClick={previousPage} style={{ flex: 1 }}>
-                <LeftOutlined />
-              </div>
-              <div style={{ flex: 1 }}>
-                {currentPage}/{totalPages}
-              </div>
-              <div onClick={nextPage}>
-                <RightOutlined />
-              </div>
-            </div>
-          </Menu.Item>
-        </SubMenu>
-        <SubMenu
-          key="sub2"
-          icon={<ToolOutlined />}
-          title="Map Tools"
-          disabled={!url}
+          {React.createElement(
+            collapsed ? MenuUnfoldOutlined : MenuFoldOutlined
+          )}
+        </Button>
+        <Menu
+          style={STYLE_MENU}
+          defaultSelectedKeys={["1"]}
+          mode="inline"
+          theme="light"
+          inlineCollapsed={collapsed}
         >
           <Menu.Item
-            key="4"
-            icon={<PlusOutlined />}
-            onClick={toggleShowCreateModal}
+            key="1"
+            icon={<UploadOutlined />}
+            onClick={onClickInputDocument}
           >
-            Create Element
+            Upload Document
+            <input
+              type="file"
+              onChange={handleSetUrlFromFile}
+              ref={inputDocumentRef}
+              hidden
+            />
           </Menu.Item>
-          <Menu.Item
-            key="5"
-            icon={<CheckOutlined />}
-            onClick={saveChanges}
-            disabled={mutableElements.length === 0}
+          <SubMenu
+            key="sub1"
+            icon={<SettingOutlined />}
+            title="Document Settings"
+            disabled={!url}
           >
-            Save changes
-          </Menu.Item>
-          <Menu.Item
-            key="6"
-            icon={<ReloadOutlined />}
-            onClick={loadStoragedChanges}
-            disabled={loadChanges.length === 0}
+            <Menu.Item key="2">
+              <div style={{ display: "flex" }}>
+                <div onClick={decrementScale} style={{ flex: 1 }}>
+                  <ZoomOutOutlined />
+                </div>
+                <div style={{ flex: 1 }}>{scale}x</div>
+                <div onClick={incrimentScale}>
+                  <ZoomInOutlined />
+                </div>
+              </div>
+            </Menu.Item>
+            <Menu.Item key="3">
+              <div style={{ display: "flex" }}>
+                <div onClick={previousPage} style={{ flex: 1 }}>
+                  <LeftOutlined />
+                </div>
+                <div style={{ flex: 1 }}>
+                  {currentPage}/{totalPages}
+                </div>
+                <div onClick={nextPage}>
+                  <RightOutlined />
+                </div>
+              </div>
+            </Menu.Item>
+          </SubMenu>
+          <SubMenu
+            key="sub2"
+            icon={<ToolOutlined />}
+            title="Map Tools"
+            disabled={!url}
           >
-            Load changes
-          </Menu.Item>
-        </SubMenu>
-      </Menu>
+            <Menu.Item
+              key="4"
+              icon={<PlusOutlined />}
+              onClick={toggleShowCreateModal}
+            >
+              Create Element
+            </Menu.Item>
+            <Menu.Item
+              key="5"
+              icon={<CheckOutlined />}
+              onClick={saveChanges}
+              disabled={mutableElements.length === 0}
+            >
+              Save changes
+            </Menu.Item>
+            <Menu.Item
+              key="6"
+              icon={<ReloadOutlined />}
+              onClick={loadStoragedChanges}
+              disabled={loadChanges.length === 0}
+            >
+              Load changes
+            </Menu.Item>
+          </SubMenu>
+        </Menu>
+      </div>
     </>
   );
 }
