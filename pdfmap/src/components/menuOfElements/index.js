@@ -1,20 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import PropTypes from "prop-types";
-import { Menu, Button, message } from "antd";
+
+import { Menu } from "antd";
 import {
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  UploadOutlined,
-  PlusOutlined,
-  ToolOutlined,
-  SettingOutlined,
-  ZoomInOutlined,
-  ZoomOutOutlined,
-  LeftOutlined,
-  RightOutlined,
-  CheckOutlined,
-  ReloadOutlined,
-  ApartmentOutlined,
   FontSizeOutlined,
   FieldNumberOutlined,
   CheckSquareOutlined,
@@ -84,7 +71,7 @@ const MenuOfElements = () => {
         <div
           style={{
             backgroundColor: "#f1c845",
-            height: "30px",
+            height: "35px",
             justifyContent: "center",
             alignItems: "center",
             display: "flex",
