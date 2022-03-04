@@ -33,7 +33,10 @@ const STYLE_MENU = {
 };
 const STYLE_MENU_CONTAINER = {
   backgroundColor: "transparent",
-  top: 0,
+  flexDirection: "column",
+  justifyContent: "flex-start",
+  alignItems: "flex-start",
+  top: 20,
   display: "flex",
   position: "fixed",
 };
@@ -140,15 +143,6 @@ function SideMenu({
         addElement={onAddElement}
       />
       <div style={STYLE_MENU_CONTAINER}>
-        <Button
-          type="primary"
-          onClick={toggleCollapsed}
-          style={{ marginBottom: 16 }}
-        >
-          {React.createElement(
-            collapsed ? MenuUnfoldOutlined : MenuFoldOutlined
-          )}
-        </Button>
         <Menu
           style={STYLE_MENU}
           defaultSelectedKeys={["1"]}
@@ -156,6 +150,15 @@ function SideMenu({
           theme="light"
           inlineCollapsed={collapsed}
         >
+          <Button
+            type="primary"
+            onClick={toggleCollapsed}
+            style={{ marginBottom: 16 }}
+          >
+            {React.createElement(
+              collapsed ? MenuUnfoldOutlined : MenuFoldOutlined
+            )}
+          </Button>
           <Menu.Item
             key="1"
             icon={<UploadOutlined />}

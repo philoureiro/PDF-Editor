@@ -15,7 +15,7 @@ const STYLE_SCROLLBAR_CONTAINER = {
   padding: 20,
   marginRight: 50,
   maxWidth: 900,
-  marginLeft: 500,
+  marginLeft: 300,
 };
 
 const STYLE_PDF_VIEWER = {
@@ -54,7 +54,7 @@ const PDFHighlighter = ({
             alignItems: "center",
             marginTop: 20,
             backgroundColor: "transparent",
-            marginLeft: "500px",
+            marginLeft: "300px",
             maxWidth: "900px",
           }}
         >
