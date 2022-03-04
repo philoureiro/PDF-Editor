@@ -17,7 +17,7 @@ const STYLE_SCROLLBAR_CONTAINER = {
   maxWidth: 900,
   borderRadius: 15,
   marginLeft: 250,
-  boxShadow: "0 0 1em black",
+  boxShadow: "0 0 0.4rem 0.2rem black",
 };
 
 const STYLE_PDF_VIEWER = {
@@ -56,8 +56,9 @@ const PDFHighlighter = ({
             alignItems: "center",
             marginTop: 20,
             backgroundColor: "transparent",
-            marginLeft: "250px",
-            maxWidth: "900px",
+            marginLeft: "200px",
+            maxWidth: "970px",
+            marginBottom: "10px",
           }}
         >
           <h3
@@ -65,6 +66,12 @@ const PDFHighlighter = ({
               color: "black",
               fontSize: "20px",
               marginTop: "40px",
+              backgroundColor: "transparent",
+              height: "35px",
+              borderRadius: "5px",
+              textAlign: "center",
+              minWidth: "180px",
+              boxShadow: "0 0rem 0.2rem gray",
             }}
           >
             Página: {pagesHandler?.currentPage} de {pagesHandler.totalPages}.
@@ -80,8 +87,8 @@ const PDFHighlighter = ({
         <div
           style={{
             ...STYLE_PDF_VIEWER,
-            width: mapContainerConfig?.width + 30,
-            height: mapContainerConfig?.height + 30,
+            width: mapContainerConfig?.width + 32,
+            height: mapContainerConfig?.height + 32,
           }}
         >
           <DocumentContainer
